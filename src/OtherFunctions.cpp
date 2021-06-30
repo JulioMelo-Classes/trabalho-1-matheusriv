@@ -1,14 +1,14 @@
 /*!
- *  @file HelperFunctions.cpp
+ *  @file OtherFunctions.cpp
  *  @brief General Functions
  *
  *  Source with the other functions of the Keno Game
  */
 
-#ifndef OtherFunctions_hpp
-#define OtherFunctions_hpp
-
 #include <string>
+#include <algorithm>
+
+#include "OtherFunctions.hpp"
 
 
 
