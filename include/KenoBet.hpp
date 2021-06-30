@@ -8,7 +8,6 @@
 #ifndef KenoBet_hpp
 #define KenoBet_hpp
 
-#include <string>
 #include <vector>
 
 using number_type = unsigned short int; //<! data type for a keno hit.
@@ -20,12 +19,6 @@ class KenoBet {
         //! Creates an empty Keno bet.
         KenoBet( ) : m_wage(0)
         { /* empty */ };
-
-        /* 
-          ----------------------------------------------------------
-           Get
-          ----------------------------------------------------------
-        */ 
 
         /*! Retrieves the player's wage on this bet.
             @return The wage value. */
@@ -41,23 +34,11 @@ class KenoBet {
         set_of_numbers_type get_spots( void ) const;
 
 
-        /* 
-          ----------------------------------------------------------
-           Set
-          ----------------------------------------------------------
-        */
-
         /*! Sets the amount of money the player is betting.
             @param wage_ The wage.
             @return True if we have a wage above zero; false otherwise. */
         bool set_wage( cash_type wage_ );
 
-
-        /* 
-          ----------------------------------------------------------
-           Methods 
-          ----------------------------------------------------------
-        */
 
         /*! Adds a number to the spots only if the number is not already there.
             @param spot_ The number we wish to include in the bet.

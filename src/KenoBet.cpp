@@ -12,12 +12,6 @@
 
 #include "KenoBet.hpp"
 
-    /* 
-      ----------------------------------------------------------
-        Get
-      ----------------------------------------------------------
-    */ 
-
     // Retrieves the player's wage on this bet.
     float KenoBet::get_wage(void) const 
     {
@@ -44,24 +38,12 @@
     }
 
 
-    /* 
-      ----------------------------------------------------------
-      Set 
-      ----------------------------------------------------------
-    */
-
     // Sets the amount of money the player is betting.
     bool KenoBet::set_wage( cash_type wage_ )
     {
         return (this->m_wage = wage_);
     }
 
-
-    /* 
-      ----------------------------------------------------------
-        Methods 
-      ----------------------------------------------------------
-    */
 
     // Adds a number to the spots only if the number is not already there.
     bool KenoBet::add_number( number_type spot_ ) 
