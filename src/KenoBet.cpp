@@ -1,7 +1,7 @@
 /*!
- *  @file KenoBet.hpp
- *  @brief Source of KenoBet Class
- *
+   @file KenoBet.hpp
+   @brief Source of KenoBet Class
+ 
  */
 
 #include <iostream>
@@ -65,14 +65,7 @@
     // Adds a number to the spots only if the number is not already there.
     bool KenoBet::add_number( number_type spot_ ) 
     {
-        if( !in_array(spot_, this->m_spots.data(), this->m_spots.size()) 
-            && this->m_spots.size() < this->m_maxSpots && spot_ > 0 
-            && spot_ <= 80 ){
-                this->m_spots.push_back(spot_);
-                quick_sort(this->m_spots.data(), this->m_spots.size());
-                return true;
-            }
-        return false;
+        if
     }
 
     // Resets a bet to an empty state.
