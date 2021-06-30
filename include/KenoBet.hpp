@@ -2,6 +2,7 @@
  *  @file KenoBet.hpp
  *  @brief KenoBet Class
  *
+ *  Header with the KenoBet Class
  */
 
 #ifndef KenoBet_hpp
