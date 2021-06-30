@@ -1,12 +1,13 @@
 /*!
-   File with the main function
-   @mainpage Keno Game
-   @author Matheus Rivaldo da Silvas
-   @date 2021
- 
-   @file KenoMain.cpp
-   @brief Driver Program
- 
+ *  @mainpage Keno
+ *  @authors Matheus Rivaldo da Silva
+ *  @date 2021
+ *  @version 1.0
+ *
+ *  @file KenoMain.cpp
+ *  @brief Main Function
+ *
+ *  File with the main function
  */
 
 #include <iostream>
