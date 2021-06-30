@@ -10,7 +10,7 @@
 
 #include <vector>
 
-using number_type = unsigned short int; //<! data type for a keno hit.
+using number_type = int; //<! data type for a keno hit.
 using cash_type = float; //<! Defines the wage type in this application.
 using set_of_numbers_type = std::vector< number_type >;
 
