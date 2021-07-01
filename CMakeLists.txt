@@ -12,7 +12,7 @@ set (CMAKE_CXX_STANDARD 14)
 # configura o diretório contendo os .h, assim você pode incluílos apenas com include "arquivo.h"
 include_directories( include )
 
-# Cria um executável com nome "KenoRun", adiciona neste executável os arquivos do test manager e o seu main.cpp
+# Cria um executável com nome "KenoRun", adiciona neste executável os arquivos OtherFunctions, KenoBet e o seu main.cpp
 add_executable( KenoRun
                 src/KenoBet.cpp
                 src/OtherFunctions.cpp
