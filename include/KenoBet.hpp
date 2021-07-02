@@ -2,7 +2,7 @@
  *  @file KenoBet.hpp
  *  @brief KenoBet Class
  *
- *  Header with the KenoBet Class
+ *  Header of the KenoBet Class
  */
 
 #ifndef KenoBet_hpp
@@ -16,9 +16,8 @@ using set_of_numbers_type = std::vector< number_type >;
 
 class KenoBet {
     public:
-        //! Creates an empty Keno bet.
-        KenoBet( ) : m_wage(0)
-        { /* empty */ };
+        //! Creates an Keno Bet.
+        explicit KenoBet( void );
 
         /*! Retrieves the player's wage on this bet.
             @return The wage value. */
@@ -39,7 +38,6 @@ class KenoBet {
             @return True if we have a wage above zero; false otherwise. */
         bool set_wage( cash_type wage_ );
 
-
         /*! Adds a number to the spots only if the number is not already there.
             @param spot_ The number we wish to include in the bet.
             @return T if number chosen is successfully inserted; F otherwise. */
@@ -52,10 +50,14 @@ class KenoBet {
             @return Number of spots present in the bet. */
         size_t size( void ) const;
 
+        /*! Fill vector with unique random numbers in range [1, 80]. */
+        set_of_numbers_type generateRandom(void) const;
+
 
     private:
         set_of_numbers_type m_spots;  //<! The player's bet.
         cash_type m_wage;             //<! The player's wage
+
 };
 
-#endif
+#endif //KenoBet
