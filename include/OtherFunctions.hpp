@@ -8,7 +8,10 @@
 #ifndef OtherFunctions_hpp
 #define OtherFunctions_hpp
 
-#include <string>
+#include<vector>
+
+//! Print a payoff table
+void printPayoffTable(std::vector<std::vector<float>> &payoff, int NR, int size);
 
 /*! This function takes last element as pivot, places the pivot element at its correct position in sorted array, and places all smaller (smaller than pivot) to left of pivot and all greater elements to right of pivot 
     @param arr Array to be divided, 

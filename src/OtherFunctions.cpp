@@ -5,10 +5,23 @@
  *  Source with the auxiliary functions of the Keno Game
  */
 
+#include <iostream>
 #include <string>
 #include <algorithm>
 
 #include "OtherFunctions.hpp"
+
+void printPayoffTable(std::vector<std::vector<float>> &payoff, int NR, int size) 
+{
+    std::cout << "\t----------+-----------\n"
+              << "\tHits      | Retorno\n"
+              << "\t----------+-----------\n";
+    // Print Table Content
+    for(auto i{0}; i <= NR; i++){
+        std::cout << "\t        " << i << " | " << payoff[size-1][i] << "\n";
+    }
+
+}
 
 int partition (int *arr, int low, int high) { 
     // pivot 
