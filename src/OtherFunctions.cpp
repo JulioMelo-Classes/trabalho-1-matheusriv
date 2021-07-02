@@ -6,21 +6,19 @@
  */
 
 #include <iostream>
-#include <string>
 #include <algorithm>
 
 #include "OtherFunctions.hpp"
 
-void printPayoffTable(std::vector<std::vector<float>> &payoff, int NR, int size) 
-{
-    std::cout << "\t----------+-----------\n"
-              << "\tHits      | Retorno\n"
-              << "\t----------+-----------\n";
-    // Print Table Content
-    for(auto i{0}; i <= NR; i++){
-        std::cout << "\t        " << i << " | " << payoff[size-1][i] << "\n";
+bool InvalidCharacters(std::string &bet_data) {
+    for(int i=0;i<bet_data.size();i++){
+        if((bet_data[i]>=33 && bet_data[i]<=45) ||
+            (bet_data[i]==47) ||
+            (bet_data[i]>=58 && bet_data[i]<=126)){
+                return true;
+        }
+        return false;
     }
-
 }
 
 int partition (int *arr, int low, int high) { 
