@@ -21,6 +21,12 @@ bool InvalidCharacters(std::string &bet_data) {
     }
 }
 
+void PrintLine( int a ){
+    for(int i{0}; i < a; i++)
+        std::cout << "-";
+    std::cout << "\n";
+}
+
 int partition (int *arr, int low, int high) { 
     // pivot 
     int pivot = arr[high]; 

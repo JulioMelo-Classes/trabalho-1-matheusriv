@@ -15,6 +15,10 @@
     @return True if string has invalid characters */
 bool InvalidCharacters(std::string &bet_data);
 
+/*! Print line of characters
+    @param a Number of characters */
+void PrintLine( int a );
+
 /*! This function takes last element as pivot, places the pivot element at its correct position in sorted array, and places all smaller (smaller than pivot) to left of pivot and all greater elements to right of pivot 
     @param arr Array to be divided, 
     @param low Starting index, 
