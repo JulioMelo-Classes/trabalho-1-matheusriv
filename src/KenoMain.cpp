@@ -29,8 +29,6 @@ int main(int argc, char *argv[]) {
 
     string aposta_filename; // <! Creates string to store file name
     string line;
-    float IC;     // <! Initial Credit
-    int NR;       // <! Number of Rounds
     int count=0;  // <! auxiliary int
     KenoBet bet;  // <! Creates KenoBet object
 
@@ -80,28 +78,29 @@ int main(int argc, char *argv[]) {
     arqDados.close(); // close opened file
 
     // Check file for invalid characters
-    for(int i=0;i<bet_data.size();i++){
-        if((bet_data[i]>=33 && bet_data[i]<=45) ||
-            (bet_data[i]==47) ||
-            (bet_data[i]>=58 && bet_data[i]<=126)){
-                cerr << ">>>> ERRO, o arquivo possui caracteres estranhos.\n";
-                exit(1);
-        }
-    }
+    if(InvalidCharacters(bet_data)){
+          cerr << ">>>> ERRO, o arquivo possui caracteres inválidos." << endl;
+          exit(1);
+    } 
 
+    float IC;
+    int NR;
     // stringstream() : This is an easy way to convert strings of digits into ints, floats or doubles.
-    strStream >> IC;      // IC float data type, initial credit
-    strStream >> NR;      // NR int data type, number of rounds
-    float FC = IC;        // <! Final Credit
-    bet.set_wage(IC/NR);  // <! Set Wage by Round
+    strStream >> IC; // IC float data type, initial credit
+    bet.set_IC(IC);
+    strStream >> NR; // NR int data type, number of rounds
+    bet.set_NR(NR);
+
+    bet.set_FC(bet.get_IC());                // <! Final Credit
+    bet.set_wage(bet.get_IC()/bet.get_NR()); // <! Set Wage by Round
 
     // If wage = 0
-    if(IC == 0 || IC < 0){
+    if(bet.get_IC() == 0 || bet.get_IC() < 0){
         cerr << ">>>> ERRO! Você não pode apostar com crédito inicial zerado!\n";
         exit(1);
     }
     // If number of rounds = 0
-    if(NR == 0 || NR < 0 || NR > 15){
+    if(bet.get_NR() == 0 || bet.get_NR() < 0 || bet.get_NR() > 15){
         cerr << ">>>> ERRO! Número de rodadas inválido!\n";
         exit(1);
     }
@@ -115,7 +114,7 @@ int main(int argc, char *argv[]) {
             cerr << ">>>> ERRO! Os números escolhidos são repetidos ou inválidos.\n";
             exit(1);
         }
-        if(count>NR){
+        if(count>bet.get_NR()){
             // If number of numbers are bigger than number of rounds, exit.
             cerr << ">>>> ERRO! A quantidade de números escolhidos é maior que o número de rodadas.\n";
             exit(1);
@@ -131,12 +130,11 @@ int main(int argc, char *argv[]) {
     cout << ">>> Aposta lida com sucesso!" << endl;
 
     // Show message with bet information 
-    cout << "    Você apostará um total de $" << IC << " créditos." << endl;
-    cout << "    Jogará um total de " << NR << " rodadas, apostando $"
-    << IC/NR << " créditos por rodada." << endl;
+    cout << "\tVocê apostará um total de $" << bet.get_IC() << " créditos." << "\n\tJogará um total de " << bet.get_NR() << " rodadas, apostando $"
+    << bet.get_IC()/bet.get_NR() << " créditos por rodada." << endl;
 
     // Show vector with the player's bet.
-    cout << "    Sua aposta tem " << bet.size(); 
+    cout << "\tSua aposta tem " << bet.size(); 
     if(bet.size() == 1) cout << " número. Ele é [ "; 
     else                cout << " números. Eles são [ ";
     for(auto i : bet.get_spots()) 
@@ -144,14 +142,14 @@ int main(int argc, char *argv[]) {
     cout << "]." << endl;
 
     // Print Payoff Table
-    printPayoffTable(payofftable, NR, bet.size());
+    bet.printPayoffTable(payofftable, bet.get_NR(), bet.size());
 
     // Rounds
-    for(int I=1; I<=NR; I++) {
+    for(int I=1; I<=bet.get_NR(); I++) {
         set_of_numbers_type random_numbers = bet.generateRandom();
 
         cout << "\t--------------------------------------------------------\n"
-            << "\t Esta é a rodada #" << I << " de " << NR
+            << "\t Esta é a rodada #" << I << " de " << bet.get_NR()
             << ", sua aposta é $" << bet.get_wage() << ". Boa Sorte!" 
             << endl;
         
@@ -165,35 +163,38 @@ int main(int argc, char *argv[]) {
         set_of_numbers_type numbers_hits = bet.get_hits(random_numbers);
 
         float taxa_retorno = payofftable[bet.size()-1][numbers_hits.size()];
-        float valor_agora = bet.get_wage() * taxa_retorno;
-        FC += valor_agora - bet.get_wage();
+        float valor_atual = bet.get_wage() * taxa_retorno;
+        bet.set_FC( (valor_atual - bet.get_wage()) );
 
         cout << "\n\tVocê acertou o(s) número(s) [ ";
         for(auto i : numbers_hits)
             cout << i << " ";
         cout << "], um total de " << numbers_hits.size() << " hits de "
         << bet.size() << ".\n\tSua taxa de retorno é " << taxa_retorno
-        << ", assim você sai com: $" << valor_agora << ".\n"
-        << "\tVocê possui um total de: $" << FC << " créditos." << endl;
+        << ", assim você sai com: $" << valor_atual << ".\n"
+        << "\tVocê possui um total de: $" << bet.get_FC() << " créditos." << endl;
     }
 
     cout << ">>> Fim das rodadas!\n"
     << "--------------------------------------------------------\n" << endl;
 
     // Calculates the difference between FC and IC.
-    float difference = FC - IC;
+    float difference = bet.get_FC() - bet.get_IC();
 
     // Show Final Message
     cout << "======= Sumário =======\n"
-    << ">>> Você gastou um total de $" << IC << " créditos." << endl;
-    if(difference >= 0){ 
-        cout << ">>> Hooray! você ganhou $" << difference
-        << " créditos!" << endl;
+    << ">>> Você gastou um total de $" << bet.get_IC() << " créditos." << endl;
+    if(difference == 0){ 
+        cout << ">>> Você não ganhou créditos!" << endl;
+    }
+    else if(difference > 0){ 
+        cout << ">>> Hooray! Você ganhou $" << difference << " créditos!"
+        << endl;
     }
     else{ 
         cout << ">>> Você perdeu $" << -difference << " créditos." << endl;
     }
-    cout << ">>> Você está saindo do jogo com um total de $" << FC << " créditos.\n" << endl;
+    cout << ">>> Você está saindo do jogo com um total de $" << bet.get_FC() << " créditos.\n" << endl;
 
     return 0;
 
