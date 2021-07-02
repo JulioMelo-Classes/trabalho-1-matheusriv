@@ -22,6 +22,21 @@
         return this->m_wage;
     }
 
+    // Retrieves the Initial Credit.
+    float KenoBet::get_IC( void ) const {
+        return this->m_IC;
+    }
+
+    // Retrieves the Final Credit.
+    float KenoBet::get_FC( void ) const {
+        return this->m_FC;
+    }
+
+    // Retrieves the Number of Rounds.
+    int KenoBet::get_NR( void ) const {
+        return this->m_NR;
+    }
+
     // Determine how many spots match the hits passed as argument.
     set_of_numbers_type KenoBet::get_hits( const set_of_numbers_type & hits_ ) const {
         // Vector that will have the matched hits.
@@ -48,6 +63,20 @@
         return (this->m_wage = wage_);
     }
 
+    // Sets the initial credit.
+    void KenoBet::set_IC( const float &n_IC ){
+        m_IC = n_IC;
+    }
+
+    // Sets the number of rounds.
+    void KenoBet::set_NR( const int &n_NR ){
+        m_NR = n_NR;
+    }
+
+    // Sets the final credit.
+    void KenoBet::set_FC( const int &n_FC ){
+        m_FC += n_FC;
+    }
 
     // Adds a number to the spots only if the number is not already there.
     bool KenoBet::add_number( number_type spot_ ) {
@@ -88,5 +117,17 @@
         quickSort(vector_hits.data(), vector_hits.size());
         
         return vector_hits;
+    }
+
+    void KenoBet::printPayoffTable(std::vector<std::vector<float>> &payoff, int NR, int size) 
+    {
+        std::cout << "\t----------+-----------\n"
+                  << "\tHits      | Retorno\n"
+                  << "\t----------+-----------\n";
+        // Print Table Content
+        for(auto i{0}; i <= NR; i++){
+            std::cout << "\t        " << i << " | " << payoff[size-1][i] << "\n";
+        }
+
     }
 

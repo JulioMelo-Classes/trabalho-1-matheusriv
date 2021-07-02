@@ -23,6 +23,18 @@ class KenoBet {
             @return The wage value. */
         cash_type get_wage( void ) const;
 
+        /*! Retrieves the Initial Credit.
+            @return The Initial Credit. */
+        float get_IC( void ) const;
+
+        /*! Retrieves the final credit.
+            @return n_FC The final credit. */
+        float get_FC( void ) const;
+
+        /*! Retrieves the Number of Rounds.
+            @return The Number of Rounds. */
+        int get_NR( void ) const;
+
         /*! Determine how many spots match the hits passed as argument.
             @param hits_ List of hits randomly chosen by the computer.
             @return An vector with the list of hits. */
@@ -37,6 +49,18 @@ class KenoBet {
             @param wage_ The wage.
             @return True if we have a wage above zero; false otherwise. */
         bool set_wage( cash_type wage_ );
+
+        /*! Sets the initial credit.
+          @param n_IC The initial credit. */
+        void set_IC ( const float &n_IC );
+        
+        /*! Sets the number of rounds.
+          @param n_NR The number of rounds. */
+        void set_NR( const int &n_NR );
+
+        /*! Sets the final credit.
+          @param n_FC The final credit. */
+        void set_FC( const int &n_FC );
 
         /*! Adds a number to the spots only if the number is not already there.
             @param spot_ The number we wish to include in the bet.
@@ -53,8 +77,13 @@ class KenoBet {
         /*! Fill vector with unique random numbers in range [1, 80]. */
         set_of_numbers_type generateRandom(void) const;
 
+        //! Print a payoff table
+        void printPayoffTable(std::vector<std::vector<float>> &payoff, int NR, int size);
 
     private:
+        float m_IC;                   //<! Initial Credit.
+        float m_FC = 0;               //<! Final Credit.
+        int m_NR;                     //<! Number of Rounds.
         set_of_numbers_type m_spots;  //<! The player's bet.
         cash_type m_wage;             //<! The player's wage
 
