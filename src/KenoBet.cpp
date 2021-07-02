@@ -27,14 +27,24 @@
         return this->m_IC;
     }
 
+    // Retrieves the Number of Rounds.
+    int KenoBet::get_NR( void ) const {
+        return this->m_NR;
+    }
+
     // Retrieves the Final Credit.
     float KenoBet::get_FC( void ) const {
         return this->m_FC;
     }
 
-    // Retrieves the Number of Rounds.
-    int KenoBet::get_NR( void ) const {
-        return this->m_NR;
+    // Retrieves the Spend Cash.
+    float KenoBet::get_SC( void ) const {
+        return this->m_SC;
+    }
+
+    // Retrieves the Spend Cash.
+    float KenoBet::get_CurrentValue( void ) const {
+        return this->m_CurrentValue;
     }
 
     // Determine how many spots match the hits passed as argument.
@@ -51,7 +61,7 @@
         // The return is the vector with the marched hits
         return matches;
     }
-
+ 
     // Return a vector< spot_type > with the spots the player has picked so far.
     set_of_numbers_type KenoBet::get_spots( void ) const {
         return this->m_spots;
@@ -74,8 +84,18 @@
     }
 
     // Sets the final credit.
-    void KenoBet::set_FC( const int &n_FC ){
+    void KenoBet::set_FC( const float &n_FC ){
         m_FC += n_FC;
+    }
+
+    // Sets the spent credit.
+    void KenoBet::set_SC( const float &n_SC ){
+        m_SC = n_SC;
+    }
+
+    // Sets the spent credit.
+    void KenoBet::set_CurrentValue( const float &CurrentValue ){
+        m_CurrentValue = CurrentValue;
     }
 
     // Adds a number to the spots only if the number is not already there.
@@ -100,7 +120,7 @@
     }
 
     // Returns a vector with 20 unique random numbers in range [1, 80].
-    set_of_numbers_type KenoBet::generateRandom(void) const {
+    set_of_numbers_type KenoBet::generate_random(void) const {
         // Create vector
         set_of_numbers_type vector_hits;
         // Fill the vector with 80 elements.
@@ -119,7 +139,7 @@
         return vector_hits;
     }
 
-    void KenoBet::printPayoffTable(std::vector<std::vector<float>> &payoff, int NR, int size) 
+    void KenoBet::print_payofftable(std::vector<std::vector<float>> &payoff, int NR, int size) 
     {
         std::cout << "\t----------+-----------\n"
                   << "\tHits      | Retorno\n"
@@ -128,6 +148,13 @@
         for(auto i{0}; i <= NR; i++){
             std::cout << "\t        " << i << " | " << payoff[size-1][i] << "\n";
         }
+    }
 
+    void KenoBet::print_vector(set_of_numbers_type &vector, int size){
+        std::cout << "[ ";
+        for(auto i{0}; i<size; i++){
+            std::cout << vector[i] << " ";
+        }
+        std::cout << "]";
     }
 
