@@ -28,11 +28,9 @@ using namespace std;
 int main(int argc, char *argv[]) {
 
     string aposta_filename; // <! Creates string to store file name
-    string line;
-    int count=0;  // <! auxiliary int
     KenoBet bet;  // <! Creates KenoBet object
 
-    vector<vector<float>> payofftable = {
+    vector<vector<float>> payoff_table = {
         {0, 3},
         {0, 1, 9},
         {0, 1, 2, 16},
@@ -60,22 +58,22 @@ int main(int argc, char *argv[]) {
 
     // Show message from reading the file
     cout << ">>> Lendo arquivo de apostas [data/" 
-    << aposta_filename << "], por favor aguarde...\n"
-    << "--------------------------------------------------------" << endl;
+    << aposta_filename << "], por favor aguarde..." << endl;
+    PrintLine(55);
 
     // Open file
     ifstream arqDados(aposta_filename);
     if(arqDados.bad()){
-        cerr << ">>>>ERRO, o arquivo não foi aberto" << endl;
+        cerr << ">>>> ERRO, o arquivo não foi aberto" << endl;
         exit(1);
     } 
 
     /* stringstream is a convenient way to manipulate strings and an easy
        way to convert strings of digits into ints, floats or doubles. */
     stringstream strStream;
-    strStream << arqDados.rdbuf(); // read the file
-    string bet_data = strStream.str(); // str holds the content of the file
-    arqDados.close(); // close opened file
+    strStream << arqDados.rdbuf();     // Read the file
+    string bet_data = strStream.str(); // String holds the content of the file
+    arqDados.close();                  // Close opened file
 
     // Check file for invalid characters
     if(InvalidCharacters(bet_data)){
@@ -90,23 +88,23 @@ int main(int argc, char *argv[]) {
     bet.set_IC(IC);
     strStream >> NR; // NR int data type, number of rounds
     bet.set_NR(NR);
-
     bet.set_FC(bet.get_IC());                // <! Final Credit
     bet.set_wage(bet.get_IC()/bet.get_NR()); // <! Set Wage by Round
 
     // If wage = 0
-    if(bet.get_IC() == 0 || bet.get_IC() < 0){
+    if(bet.get_IC() <= 0){
         cerr << ">>>> ERRO! Você não pode apostar com crédito inicial zerado!\n";
         exit(1);
     }
     // If number of rounds = 0
-    if(bet.get_NR() == 0 || bet.get_NR() < 0 || bet.get_NR() > 15){
+    if(bet.get_NR() <= 0 || bet.get_NR() > 15){
         cerr << ">>>> ERRO! Número de rodadas inválido!\n";
         exit(1);
     }
+    
+    int count=0;  // <! auxiliary int
     // Read information till the end of the file.
     while(!strStream.eof()){
-        ++count;
         int num;
         strStream >> num;
         // If conditions of add number are invalid, exit.
@@ -115,16 +113,23 @@ int main(int argc, char *argv[]) {
             exit(1);
         }
         if(count>bet.get_NR()){
-            // If number of numbers are bigger than number of rounds, exit.
+            // If quantity of numbers is greater than number of rounds, exit.
             cerr << ">>>> ERRO! A quantidade de números escolhidos é maior que o número de rodadas.\n";
             exit(1);
         }
+        ++count;
+    }
+    // If quantity of numbers is smaller than number of rounds, exit.
+    if(count<bet.get_NR()){
+        cerr << ">>>> ERRO! A quantidade de números escolhidos é menor que o número de rodadas.\n";
+        exit(1);
     }
     // If spots values are invalid
     if(bet.get_spots().size() == 0) {
         cerr << ">>>> ERRO! Sua aposta é inválida!\n";
         exit(1);
     }
+
 
     // Show sucess message
     cout << ">>> Aposta lida com sucesso!" << endl;
@@ -135,64 +140,68 @@ int main(int argc, char *argv[]) {
 
     // Show vector with the player's bet.
     cout << "\tSua aposta tem " << bet.size(); 
-    if(bet.size() == 1) cout << " número. Ele é [ "; 
-    else                cout << " números. Eles são [ ";
-    for(auto i : bet.get_spots()) 
-        cout << i << " ";
-    cout << "]." << endl;
+    if(bet.size() == 1) cout << " número. Ele é "; 
+    else                cout << " números. Eles são ";
+    // Print the vector with the spots the player has picked.
+    set_of_numbers_type vspots = bet.get_spots();
+    bet.print_vector(vspots, vspots.size());
+    cout << endl;
 
     // Print Payoff Table
-    bet.printPayoffTable(payofftable, bet.get_NR(), bet.size());
+    bet.print_payofftable(payoff_table, bet.get_NR(), bet.size());
 
     // Rounds
     for(int I=1; I<=bet.get_NR(); I++) {
-        set_of_numbers_type random_numbers = bet.generateRandom();
+        // Creates vector with random numbers without repetition
+        set_of_numbers_type random_vector = bet.generate_random();
 
-        cout << "\t--------------------------------------------------------\n"
-            << "\t Esta é a rodada #" << I << " de " << bet.get_NR()
-            << ", sua aposta é $" << bet.get_wage() << ". Boa Sorte!" 
-            << endl;
+        cout << "\t";
+        PrintLine(55);
+        cout << "\t Esta é a rodada #" << I << " de " << bet.get_NR()
+          << ", sua aposta é $" << bet.get_wage() << ". Boa Sorte!" 
+          << endl;
         
-        // Show random generated numbers
-        cout << "\tOs números sorteados são: [ ";
-        for(auto i : random_numbers)
-            cout << i << " ";
-        cout << "]" << endl;
+        cout << "\tOs números sorteados são: ";
+        // Print the random numbers vector
+        bet.print_vector(random_vector, random_vector.size());
+        cout << endl;
 
         // Create vector with spots that match the hits.
-        set_of_numbers_type numbers_hits = bet.get_hits(random_numbers);
+        set_of_numbers_type numbers_hits = bet.get_hits(random_vector);
 
-        float taxa_retorno = payofftable[bet.size()-1][numbers_hits.size()];
-        float valor_atual = bet.get_wage() * taxa_retorno;
-        bet.set_FC( (valor_atual - bet.get_wage()) );
+        // Get the payout rate from the payoff table
+        float fator_retorno = payoff_table[bet.size()-1][numbers_hits.size()];
+        // Calculates the Current Value
+        bet.set_CurrentValue( bet.get_wage() * fator_retorno );
+        // Updates FC, the final credit
+        bet.set_FC( (bet.get_CurrentValue() - bet.get_wage()) );
 
-        cout << "\n\tVocê acertou o(s) número(s) [ ";
-        for(auto i : numbers_hits)
-            cout << i << " ";
-        cout << "], um total de " << numbers_hits.size() << " hits de "
-        << bet.size() << ".\n\tSua taxa de retorno é " << taxa_retorno
-        << ", assim você sai com: $" << valor_atual << ".\n"
-        << "\tVocê possui um total de: $" << bet.get_FC() << " créditos." << endl;
+        cout << "\n\tVocê acertou o(s) número(s) ";
+        bet.print_vector(numbers_hits, numbers_hits.size());
+        cout << ", um total de " << numbers_hits.size() << " hits de "
+          << bet.size() << ".\n\tSua taxa de retorno é " << fator_retorno
+          << ", assim você sai com: $" << bet.get_CurrentValue() << ".\n"
+          << "\tVocê possui um total de: $" << bet.get_FC() << " créditos." << endl;
     }
 
-    cout << ">>> Fim das rodadas!\n"
-    << "--------------------------------------------------------\n" << endl;
+    cout << ">>> Fim das rodadas!" << endl;
+    PrintLine(55);
 
-    // Calculates the difference between FC and IC.
-    float difference = bet.get_FC() - bet.get_IC();
+    // Calculates the difference between FC and IC, the spent cash.
+    bet.set_SC( bet.get_FC() - bet.get_IC() );
 
     // Show Final Message
     cout << "======= Sumário =======\n"
     << ">>> Você gastou um total de $" << bet.get_IC() << " créditos." << endl;
-    if(difference == 0){ 
+    if(bet.get_SC() == 0){ 
         cout << ">>> Você não ganhou créditos!" << endl;
     }
-    else if(difference > 0){ 
-        cout << ">>> Hooray! Você ganhou $" << difference << " créditos!"
+    else if(bet.get_SC() > 0){ 
+        cout << ">>> Hooray! Você ganhou $" << bet.get_SC() << " créditos!"
         << endl;
     }
     else{ 
-        cout << ">>> Você perdeu $" << -difference << " créditos." << endl;
+        cout << ">>> Você perdeu $" << -bet.get_SC() << " créditos." << endl;
     }
     cout << ">>> Você está saindo do jogo com um total de $" << bet.get_FC() << " créditos.\n" << endl;
 
