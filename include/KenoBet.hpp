@@ -16,8 +16,9 @@ using set_of_numbers_type = std::vector< number_type >;
 
 class KenoBet {
     public:
-        //! Creates an Keno Bet.
-        explicit KenoBet( void );
+        //! Creates an empty Keno bet.
+        KenoBet( ) : m_wage(0)
+        { /* empty */ };
 
         /*! Retrieves the player's wage on this bet.
             @return The wage value. */
@@ -42,6 +43,10 @@ class KenoBet {
         /*! Retrieves the Current Value.
             @return The Current Value. */
         float get_CurrentValue( void ) const;
+
+        /*! Retrieves the Payout Value.
+            @return The Payout Value. */
+        float get_PayoffValue( void ) const;
 
         /*! Determine how many spots match the hits passed as argument.
             @param hits_ List of hits randomly chosen by the computer.
@@ -78,6 +83,10 @@ class KenoBet {
             @param CurrentValue The current value. */
         void set_CurrentValue( const float &CurrentValue );
 
+        /*! Sets the payout value.
+            @param PayoutValue The payout value. */
+        void set_PayoffValue( const float &PayoffValue );
+
         /*! Adds a number to the spots only if the number is not already there.
             @param spot_ The number we wish to include in the bet.
             @return T if number chosen is successfully inserted; F otherwise. */
@@ -105,6 +114,7 @@ class KenoBet {
         int m_NR;                     //<! Number of Rounds.
         float m_FC = 0;               //<! Final Credit.
         float m_SC;                   //<! Spent Cash.
+        float m_PayoffValue;          //<! Payout Value. 
         float m_CurrentValue;         //<! Current Value.
         set_of_numbers_type m_spots;  //<! The player's bet.
         cash_type m_wage;             //<! The player's wage

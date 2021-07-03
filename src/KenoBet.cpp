@@ -12,11 +12,6 @@
 #include "KenoBet.hpp"
 #include "OtherFunctions.hpp"
 
-    // Creates a KenoBet 
-    KenoBet::KenoBet( void ) {
-        this->m_spots.resize(0);
-    }
-
     // Retrieves the player's wage on this bet.
     float KenoBet::get_wage(void) const {
         return this->m_wage;
@@ -45,6 +40,11 @@
     // Retrieves the Spend Cash.
     float KenoBet::get_CurrentValue( void ) const {
         return this->m_CurrentValue;
+    }
+
+    // Retrieves the Payout Value.
+    float KenoBet::get_PayoffValue( void ) const {
+        return this->m_PayoffValue;
     }
 
     // Determine how many spots match the hits passed as argument.
@@ -98,6 +98,11 @@
         m_CurrentValue = CurrentValue;
     }
 
+    // Sets the payout value.
+    void KenoBet::set_PayoffValue( const float &PayoffValue ){
+        m_PayoffValue = PayoffValue;
+    }
+
     // Adds a number to the spots only if the number is not already there.
     bool KenoBet::add_number( number_type spot_ ) {
         if( !(std::find(this->m_spots.begin(), this->m_spots.end(), spot_) != this->m_spots.end()) && spot_ > 0 && spot_ <= 80 ){
@@ -127,13 +132,13 @@
         for(int i=0; i<80; i++){  
             vector_hits.push_back(i+1);
         }
-        // Create a real random number
+        // Create a real random number.
         std::random_device r;
-        // Shuffle vector content using the random number as seed
+        // Shuffle vector using the random number as seed.
         std::shuffle(vector_hits.begin(), vector_hits.end(), std::default_random_engine(r()));
-        // Resize vector to 20 elements
+        // Resize vector to 20 elements.
         vector_hits.resize(20);
-        // Sort vector
+        // Sort vector content.
         quickSort(vector_hits.data(), vector_hits.size());
         
         return vector_hits;
