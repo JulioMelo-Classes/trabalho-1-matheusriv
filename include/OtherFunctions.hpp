@@ -11,7 +11,7 @@
 #include<vector>
 #include<string>
 
-/*! Check if string has invalid characters
+/*! Check if string has invalid characters (ASCII code)
     @return True if string has invalid characters */
 bool InvalidCharacters(std::string &bet_data);
 
