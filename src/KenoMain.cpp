@@ -62,8 +62,8 @@ int main(int argc, char *argv[]) {
     PrintLine(55);
 
     // Open file
-    ifstream arqDados(aposta_filename);
-    if(arqDados.bad()){
+    ifstream arqDados("../data/"+aposta_filename);
+    if(!arqDados){
         cerr << ">>>> ERRO, o arquivo não foi aberto" << endl;
         exit(1);
     } 
@@ -170,16 +170,16 @@ int main(int argc, char *argv[]) {
         set_of_numbers_type numbers_hits = bet.get_hits(random_vector);
 
         // Get the payout rate from the payoff table
-        float fator_retorno = payoff_table[bet.size()-1][numbers_hits.size()];
+        bet.set_PayoffValue( payoff_table[bet.size()-1][numbers_hits.size()] );
         // Calculates the Current Value
-        bet.set_CurrentValue( bet.get_wage() * fator_retorno );
+        bet.set_CurrentValue( bet.get_wage() * bet.get_PayoffValue() );
         // Updates FC, the final credit
         bet.set_FC( (bet.get_CurrentValue() - bet.get_wage()) );
 
         cout << "\n\tVocê acertou o(s) número(s) ";
         bet.print_vector(numbers_hits, numbers_hits.size());
         cout << ", um total de " << numbers_hits.size() << " hits de "
-          << bet.size() << ".\n\tSua taxa de retorno é " << fator_retorno
+          << bet.size() << ".\n\tSua taxa de retorno é " << bet.get_PayoffValue()
           << ", assim você sai com: $" << bet.get_CurrentValue() << ".\n"
           << "\tVocê possui um total de: $" << bet.get_FC() << " créditos." << endl;
     }
