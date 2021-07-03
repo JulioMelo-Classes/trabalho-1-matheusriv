@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
     // If number of rounds = 0
-    if(bet.get_NR() <= 0 || bet.get_NR() > 15){
+    if(bet.get_NR() <= 0){
         cerr << ">>>> ERRO! Número de rodadas inválido!\n";
         exit(1);
     }
@@ -112,17 +112,12 @@ int main(int argc, char *argv[]) {
             cerr << ">>>> ERRO! Os números escolhidos são repetidos ou inválidos.\n";
             exit(1);
         }
-        if(count>bet.get_NR()){
+        if(count>15){
             // If quantity of numbers is greater than number of rounds, exit.
-            cerr << ">>>> ERRO! A quantidade de números escolhidos é maior que o número de rodadas.\n";
+            cerr << ">>>> ERRO! A quantidade de números escolhidos é inválida.\n";
             exit(1);
         }
         ++count;
-    }
-    // If quantity of numbers is smaller than number of rounds, exit.
-    if(count<bet.get_NR()){
-        cerr << ">>>> ERRO! A quantidade de números escolhidos é menor que o número de rodadas.\n";
-        exit(1);
     }
     // If spots values are invalid
     if(bet.get_spots().size() == 0) {
@@ -135,7 +130,9 @@ int main(int argc, char *argv[]) {
     cout << ">>> Aposta lida com sucesso!" << endl;
 
     // Show message with bet information 
-    cout << "\tVocê apostará um total de $" << bet.get_IC() << " créditos." << "\n\tJogará um total de " << bet.get_NR() << " rodadas, apostando $"
+    cout << "\tVocê apostará um total de $" << bet.get_IC() 
+    << " créditos.\n" << "\tJogará um total de " << bet.get_NR() 
+    << " rodadas, apostando $"
     << bet.get_IC()/bet.get_NR() << " créditos por rodada." << endl;
 
     // Show vector with the player's bet.
