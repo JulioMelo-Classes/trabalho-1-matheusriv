@@ -103,19 +103,19 @@ class KenoBet {
         set_of_numbers_type generate_random(void) const;
 
         //! Print a payoff table
-        void print_payofftable(std::vector<std::vector<float>> &payoff, int NR, int size);
+        void print_payofftable(std::vector<std::vector<float>> &payoff);
 
         /*! Print a vector
             @param vector The vector */
         void print_vector(set_of_numbers_type &vector, int size);
 
     private:
-        float m_IC;                   //<! Initial Credit.
-        int m_NR;                     //<! Number of Rounds.
-        float m_FC = 0;               //<! Final Credit.
-        float m_SC;                   //<! Spent Cash.
-        float m_PayoffValue;          //<! Payout Value. 
-        float m_CurrentValue;         //<! Current Value.
+        cash_type   m_IC;             //<! Initial Credit.
+        number_type m_NR;             //<! Number of Rounds.
+        cash_type   m_FC = 0;         //<! Final Credit.
+        cash_type   m_SC;             //<! Spent Cash.
+        cash_type   m_PayoffValue;    //<! Payout Value. 
+        cash_type   m_CurrentValue;   //<! Current Value.
         set_of_numbers_type m_spots;  //<! The player's bet.
         cash_type m_wage;             //<! The player's wage
 

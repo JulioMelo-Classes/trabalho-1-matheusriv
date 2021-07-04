@@ -144,14 +144,14 @@
         return vector_hits;
     }
 
-    void KenoBet::print_payofftable(std::vector<std::vector<float>> &payoff, int NR, int size) 
+    void KenoBet::print_payofftable(std::vector<std::vector<float>> &payoff) 
     {
         std::cout << "\t----------+-----------\n"
-                  << "\tHits      | Retorno\n"
+                  << "\t Hits     | Retorno\n"
                   << "\t----------+-----------\n";
         // Print Table Content
-        for(auto i{0}; i <= NR; i++){
-            std::cout << "\t        " << i << " | " << payoff[size-1][i] << "\n";
+        for(auto i{0}; i <= this->size(); i++){
+            std::cout << "\t " << i << "\t\t  | " << payoff[this->size()-1][i] << "\n";
         }
     }
 
