@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 
     // Check command line arguments
     if(argc == 1){ 
-        cerr << "Sem arquivo, jogando com o arquivo default de apostas" << endl;
+        cerr << "Sem arquivo, jogando com o arquivo default de apostas." << endl;
         aposta_filename = "bet_01.dat";
     }
     else
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
     // Show message from reading the file
     cout << ">>> Lendo arquivo de apostas [data/" 
     << aposta_filename << "], por favor aguarde..." << endl;
-    PrintLine(55);
+    PrintLine(58);
 
     // Open file
     ifstream arqDados("../data/"+aposta_filename);
@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 
     /* stringstream is a convenient way to manipulate strings and an easy
        way to convert strings of digits into ints, floats or doubles. */
-    stringstream strStream;
+    stringstream strStream;            // Create a stringstream
     strStream << arqDados.rdbuf();     // Read the file
     string bet_data = strStream.str(); // String holds the content of the file
     arqDados.close();                  // Close opened file
@@ -81,15 +81,14 @@ int main(int argc, char *argv[]) {
           exit(1);
     } 
 
-    float IC;
-    int NR;
-    // stringstream() : This is an easy way to convert strings of digits into ints, floats or doubles.
+    float IC; // <! Initial Credit
+    int NR;   // <! Number of Rounds
     strStream >> IC; // IC float data type, initial credit
     bet.set_IC(IC);
     strStream >> NR; // NR int data type, number of rounds
     bet.set_NR(NR);
-    bet.set_FC(bet.get_IC());                // <! Final Credit
-    bet.set_wage(bet.get_IC()/bet.get_NR()); // <! Set Wage by Round
+    bet.set_FC(bet.get_IC());                // Final Credit
+    bet.set_wage(bet.get_IC()/bet.get_NR()); // Set Wage by Round
 
     // If wage = 0
     if(bet.get_IC() <= 0){
@@ -112,8 +111,8 @@ int main(int argc, char *argv[]) {
             cerr << ">>>> ERRO! Os números escolhidos são repetidos ou inválidos.\n";
             exit(1);
         }
+        // If quantity of numbers is greater than 15, exit.
         if(count>15){
-            // If quantity of numbers is greater than number of rounds, exit.
             cerr << ">>>> ERRO! A quantidade de números escolhidos é inválida.\n";
             exit(1);
         }
@@ -145,16 +144,16 @@ int main(int argc, char *argv[]) {
     cout << endl;
 
     // Print Payoff Table
-    bet.print_payofftable(payoff_table, bet.get_NR(), bet.size());
+    bet.print_payofftable(payoff_table);
 
     // Rounds
-    for(int I=1; I<=bet.get_NR(); I++) {
+    for(int IndexRound=1; IndexRound<=bet.get_NR(); IndexRound++) {
         // Creates vector with random numbers without repetition
         set_of_numbers_type random_vector = bet.generate_random();
 
         cout << "\t";
-        PrintLine(55);
-        cout << "\t Esta é a rodada #" << I << " de " << bet.get_NR()
+        PrintLine(58);
+        cout << "\t Esta é a rodada #" << IndexRound << " de " << bet.get_NR()
           << ", sua aposta é $" << bet.get_wage() << ". Boa Sorte!" 
           << endl;
         
@@ -164,25 +163,28 @@ int main(int argc, char *argv[]) {
         cout << endl;
 
         // Create vector with spots that match the hits.
-        set_of_numbers_type numbers_hits = bet.get_hits(random_vector);
+        set_of_numbers_type vector_hits = bet.get_hits(random_vector);
 
         // Get the payout rate from the payoff table
-        bet.set_PayoffValue( payoff_table[bet.size()-1][numbers_hits.size()] );
+        bet.set_PayoffValue( payoff_table[bet.size()-1][vector_hits.size()] );
         // Calculates the Current Value
         bet.set_CurrentValue( bet.get_wage() * bet.get_PayoffValue() );
         // Updates FC, the final credit
         bet.set_FC( (bet.get_CurrentValue() - bet.get_wage()) );
 
-        cout << "\n\tVocê acertou o(s) número(s) ";
-        bet.print_vector(numbers_hits, numbers_hits.size());
-        cout << ", um total de " << numbers_hits.size() << " hits de "
-          << bet.size() << ".\n\tSua taxa de retorno é " << bet.get_PayoffValue()
-          << ", assim você sai com: $" << bet.get_CurrentValue() << ".\n"
+        if(vector_hits.size() <= 1) cout << "\n\tVocê acertou o número "; 
+        else                        cout << "\n\tVocê acertou os números ";
+        bet.print_vector(vector_hits, vector_hits.size());
+        cout << ", um total de " << vector_hits.size() << " hits de "
+          << bet.size() << ".\n\tSua taxa de retorno é " 
+          << bet.get_PayoffValue() << ", assim você sai com: $" 
+          << bet.get_CurrentValue() << ".\n"
           << "\tVocê possui um total de: $" << bet.get_FC() << " créditos." << endl;
     }
 
     cout << ">>> Fim das rodadas!" << endl;
-    PrintLine(55);
+    PrintLine(58);
+    cout << endl;
 
     // Calculates the difference between FC and IC, the spent cash.
     bet.set_SC( bet.get_FC() - bet.get_IC() );
