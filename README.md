@@ -7,7 +7,15 @@ Repositório contendo as especificações do Trabalho 1 da disciplina de LP1
 
 Os jogadores apostam escolhendo entre 1 e 15 números únicos no intervalo [1, 80] e definem o número de rodadas e a quantidade de crédito inicial, que será dividido entre as rodadas. 
 
-Quando o jogador escolhe seus números, o algoritmo gera vinte números aleatórios entre 1 e 80. Baseado na quantidade de números que o jogador acertou, e no valor que ele apostou, ele recebe um valor de volta. Dessa forma, o jogador pode ganhar cerca de 1000 vezes o valor apostado!
+Depois que uma aposta válida é processada, o jogo executa o número especificado de rodadas, apostando em cada rodada um valor igual a Crédito Inicial / Número de Rodadas. Para cada rodada o jogo gera vinte números aleatórios entre 1 e 80. Os números apostados pelo jogador, chamados de spots, são comparados com os números sorteados para determinar quantos números o jogador acertou naquela rodada. 
+
+O conjunto dos números que o jogador acertou são chamados de hits. O número de hits determina o fator de retorno que é multiplicado pelo valor apostado naquele turno, determinando, assim, se o jogador ganha ou perde dinheiro.
+
+O fator de retorno vem da tabela de retorno. Essa tabela determina o fator de retorno de uma rodada com base no valor apostado, na quantidade de números apostados e na quantidade de hits daquela rodada. A tabela que o jogo usa está definida abaixo:
+
+![](./pics/tabela1.PNG)
+
+Cada linha corresponde a uma escala de retorno com base na quantidade de spots. Por exemplo, suponha que um jogador aposta 100 créditos em uma cartela com 5 spots e obtém 3 hits (o valor de retorno, de acordo com a tabela é 3); Neste caso, o jogador ganha 300 créditos naquela rodada.
 
 # Como jogar
 
@@ -45,13 +53,8 @@ Isso criará um executável dentro de `build` chamado de `KenoRun`.
 
 Logo após a compilação, para executar o programa gerado use os comandos:
 
-No linux:
 ```
 ./KenoRun nome_do_arquivo.dat
-```
-No windows:
-```
-KenoRun nome_do_arquivo.dat
 ```
 
 Por exemplo, se o nome do seu arquivo for "aposta":
@@ -59,4 +62,4 @@ Por exemplo, se o nome do seu arquivo for "aposta":
 ./KenoRun aposta.dat
 ```
 
-Se nenhum arquivo de aposta foi especificado, o programa será executado com um arquivo de aposta demo (localizado em `data / default_bet.dat`).
+Se nenhum arquivo de aposta foi especificado, o programa será executado com um arquivo de aposta demo ( localizado em `data / default_bet.dat`).
