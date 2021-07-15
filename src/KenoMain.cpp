@@ -21,7 +21,28 @@
 
 using namespace std;
 
-//! Main function
+/*
+Avaliação
+Processamento do Arquivo de Entrada: 1
+Execução correta: 1
+Interfcace Textual: 1
+Documentação: 1
+Compilação automatizada: 1
+Organização em src, include, build, data: 1
+
+Comentários
+- Acho que você poderia ter feito uma melhor divisão das funcionalidades, especialmente
+a parte de impressão da interface textual, talvez a parte de validadação também pudesse
+ficar melhor encapsulada em uma classe.
+- A indentação do arquivo KenoBet.cpp ficou estranha, não sei se foi intencional, mas
+não vou penalizar já que a diferença é um tab a mais.
+- O arquivo OtherFunctions ficou ok, embora o nome não seja muito feliz, se vc tirasse aquela
+função "invalidCharacters" ele ficaria apenas responsável pelo quicksort, aí o nome ficaria melhor.
+Ainda assim a organização dele poderia usar um pouco mais de C++ através de funções estáticas
+ou de um namespace.
+*/
+
+//! Main function - não é necessário =)
 //! @param argc number of command line arguments
 //! @param argv list of command-line arguments, used to read the bet    file name
 //! @return 0 if success, 1 if not
